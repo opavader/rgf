@@ -1,4 +1,3 @@
-context("test")
 library(testthat)
 library(RGF)
 

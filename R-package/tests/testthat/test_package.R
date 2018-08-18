@@ -1,25 +1,10 @@
+context("test")
+
 #========================================================================================
 
 # helper function to skip tests if we don't have the 'foo' module
 # https://github.com/rstudio/reticulate
 
-
-skip_test_if_no_module <- function(MODULE) {                        # MODULE is of type character string ( length(MODULE) >= 1 )
-
-  if (length(MODULE) == 1) {
-
-    module_exists <- reticulate::py_module_available(MODULE)}
-
-  else {
-
-    module_exists <- sum(as.vector(sapply(MODULE, function(x) reticulate::py_module_available(x)))) == length(MODULE)
-  }
-
-  if (!module_exists) {
-
-    testthat::skip(paste0(MODULE, " is not available for testthat-testing"))
-  }
-}
 
 #===========================================================================================
 
@@ -71,9 +56,7 @@ W = runif(100)
 # tests for 'RGF_Regressor'
 #-------------------------
 
-testthat::test_that("the methods of the 'RGF_Regressor' class return the correct output", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'RGF_Regressor' class return the correct output", {
 
   init_regr = RGF_Regressor$new(max_leaf = 50, sl2 = 0.1, n_iter = 10)
 
@@ -91,7 +74,7 @@ testthat::test_that("the methods of the 'RGF_Regressor' class return the correct
 
   tmp_score_W = init_regr$score(x = x_rgf, y = y_reg, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_reg) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) )
+  expect_true( length(pr) == length(y_reg) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) )
 })
 
 
@@ -99,9 +82,7 @@ testthat::test_that("the methods of the 'RGF_Regressor' class return the correct
 # tests for 'RGF_Classifier'
 #---------------------------
 
-testthat::test_that("the methods of the 'RGF_Classifier' class return the correct output (binary classification)", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'RGF_Classifier' class return the correct output (binary classification)", {
 
   init_class = RGF_Classifier$new(max_leaf = 50, sl2 = 0.1, n_iter = 10)
 
@@ -121,14 +102,12 @@ testthat::test_that("the methods of the 'RGF_Classifier' class return the correc
 
   tmp_score_W = init_class$score(x = x_rgf, y = y_BINclass, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_BINclass) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_BINclass)) )
+  expect_true( length(pr) == length(y_BINclass) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_BINclass)) )
 })
 
 
 
-testthat::test_that("the methods of the 'RGF_Classifier' class return the correct output (multiclass classification)", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'RGF_Classifier' class return the correct output (multiclass classification)", {
 
   init_class = RGF_Classifier$new(max_leaf = 50, sl2 = 0.1, n_iter = 10)
 
@@ -148,7 +127,7 @@ testthat::test_that("the methods of the 'RGF_Classifier' class return the correc
 
   tmp_score_W = init_class$score(x = x_rgf, y = y_MULTIclass, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_BINclass) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_MULTIclass)) )
+  expect_true( length(pr) == length(y_BINclass) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_MULTIclass)) )
 })
 
 
@@ -156,9 +135,7 @@ testthat::test_that("the methods of the 'RGF_Classifier' class return the correc
 # tests for 'FastRGF_Regressor'
 #------------------------------
 
-testthat::test_that("the methods of the 'FastRGF_Regressor' class return the correct output", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'FastRGF_Regressor' class return the correct output", {
 
   init_regr = FastRGF_Regressor$new(n_estimators = 50, max_bin = 65000)
 
@@ -180,7 +157,7 @@ testthat::test_that("the methods of the 'FastRGF_Regressor' class return the cor
 
   tmp_score_W = init_regr$score(x = x_FASTrgf, y = y_reg, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_reg) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) )
+  expect_true( length(pr) == length(y_reg) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) )
 })
 
 
@@ -189,9 +166,7 @@ testthat::test_that("the methods of the 'FastRGF_Regressor' class return the cor
 # tests for 'FastRGF_Classifier'
 #------------------------------
 
-testthat::test_that("the methods of the 'FastRGF_Classifier' class return the correct output (binary classification)", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'FastRGF_Classifier' class return the correct output (binary classification)", {
 
   init_class = FastRGF_Classifier$new(n_estimators = 50, max_bin = 65000)
 
@@ -212,14 +187,12 @@ testthat::test_that("the methods of the 'FastRGF_Classifier' class return the co
 
   tmp_score_W = init_class$score(x = x_FASTrgf, y = y_BINclass, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_BINclass) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_BINclass)) )
+  expect_true( length(pr) == length(y_BINclass) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_BINclass)) )
 })
 
 
 
-testthat::test_that("the methods of the 'FastRGF_Classifier' class return the correct output (multiclass classification)", {
-
-  skip_test_if_no_module("rgf.sklearn")
+test_that("the methods of the 'FastRGF_Classifier' class return the correct output (multiclass classification)", {
 
   init_class = FastRGF_Classifier$new(n_estimators = 50, max_bin = 65000)
 
@@ -240,7 +213,7 @@ testthat::test_that("the methods of the 'FastRGF_Classifier' class return the co
 
   tmp_score_W = init_class$score(x = x_FASTrgf, y = y_MULTIclass, sample_weight = W)
 
-  testthat::expect_true( length(pr) == length(y_MULTIclass) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_MULTIclass)) )
+  expect_true( length(pr) == length(y_MULTIclass) && sum(validate) == 16 && is.double(tmp_score) && is.double(tmp_score_W) && ncol(pr_proba) == length(unique(y_MULTIclass)) )
 })
 
 
@@ -248,17 +221,13 @@ testthat::test_that("the methods of the 'FastRGF_Classifier' class return the co
 # conversion of an R matrix to a scipy sparse matrix
 #---------------------------------------------------
 
-testthat::test_that("the 'mat_2scipy_sparse' returns an error in case that the 'format' parameter is invalid", {
+test_that("the 'mat_2scipy_sparse' returns an error in case that the 'format' parameter is invalid", {
 
-  skip_test_if_no_module("scipy")
-
-  testthat::expect_error( mat_2scipy_sparse(x_rgf, format = 'invalid') )
+  expect_error( mat_2scipy_sparse(x_rgf, format = 'invalid') )
 })
 
 
-testthat::test_that("the 'mat_2scipy_sparse' returns a scipy sparse matrix", {
-
-  skip_test_if_no_module("scipy")
+test_that("the 'mat_2scipy_sparse' returns a scipy sparse matrix", {
 
   res = mat_2scipy_sparse(x_rgf, format = 'sparse_row_matrix')
 
@@ -266,7 +235,7 @@ testthat::test_that("the 'mat_2scipy_sparse' returns a scipy sparse matrix", {
 
   same_dims = sum(unlist(reticulate::py_to_r(res$shape)) == dim(x_rgf)) == 2         # sparse matrix has same dimensions as input dense matrix
 
-  testthat::expect_true( same_dims && cl_obj == "scipy.sparse.csr.csr_matrix"  )
+  expect_true( same_dims && cl_obj == "scipy.sparse.csr.csr_matrix"  )
 })
 
 
@@ -281,20 +250,17 @@ if (Sys.info()["sysname"] != 'Darwin') {
   # conversion of an R 'dgCMatrix' to a scipy sparse matrix
   #--------------------------------------------------------
   
-  testthat::test_that("the 'TO_scipy_sparse' returns an error in case that the input object is not of type 'dgCMatrix' or 'dgRMatrix'", {
-  
-    skip_test_if_no_module("scipy")
+  test_that("the 'TO_scipy_sparse' returns an error in case that the input object is not of type 'dgCMatrix' or 'dgRMatrix'", {
   
     mt = matrix(runif(20), nrow = 5, ncol = 4)
   
-    testthat::expect_error( TO_scipy_sparse(mt) )
+    expect_error( TO_scipy_sparse(mt) )
   })
   
   
-  testthat::test_that("the 'TO_scipy_sparse' returns the correct output", {
+  test_that("the 'TO_scipy_sparse' returns the correct output", {
   
-    skip_test_if_no_module("scipy")
-  
+ 
     data = c(1, 0, 2, 0, 0, 3, 4, 5, 6)
   
     dgcM = Matrix::Matrix(data = data, nrow = 3,
@@ -309,17 +275,16 @@ if (Sys.info()["sysname"] != 'Darwin') {
   
     validate_dims = sum(dim(dgcM) == unlist(reticulate::py_to_r(res$shape))) == 2      # sparse matrix has same dimensions as input R sparse matrix
   
-    testthat::expect_true( validate_dims && cl_obj == "scipy.sparse.csc.csc_matrix" )
+    expect_true( validate_dims && cl_obj == "scipy.sparse.csc.csc_matrix" )
   })
   
   
   # test that one of the RGF classes works with sparse (scipy) matrices
   #--------------------------------------------------------------------
   
-  testthat::test_that("the RGF_Regressor works with sparse (scipy) matrices", {
+  test_that("the RGF_Regressor works with sparse (scipy) matrices", {
   
-    skip_test_if_no_module(c("rgf.sklearn", 'scipy'))
-  
+ 
     set.seed(1)
     sap = sapply(1:1000, function(x) sample(c(0.0, runif(1)), 1, replace = F))            # create sparse data
   
@@ -347,6 +312,6 @@ if (Sys.info()["sysname"] != 'Darwin') {
   
     tmp_score_W = init_regr$score(x = scipySprse, y = y_reg, sample_weight = W)
   
-    testthat::expect_true( length(pr) == length(y_reg) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) )
+    expect_true( length(pr) == length(y_reg) && sum(validate) == 15 && is.double(tmp_score) && is.double(tmp_score_W) )
   })
 }
