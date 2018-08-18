@@ -42,19 +42,22 @@ Rscript -e 'update.packages(ask = FALSE, instlib = Sys.getenv("R_LIB_PATH"))'
 
 Rscript -e 'devtools::install_deps(pkg = ".", dependencies = TRUE)'
 
-R CMD build . || exit -1
+#R CMD build . || exit -1
 
 PKG_FILE_NAME=$(ls -1t *.tar.gz | head -n 1)
 PKG_NAME="${PKG_FILE_NAME%%_*}"
 LOG_FILE_NAME="$PKG_NAME.Rcheck/00check.log"
 
-R CMD check "${PKG_FILE_NAME}" --as-cran || exit -1
-if grep -q -R "WARNING" "$LOG_FILE_NAME"; then
-    echo "WARNINGS have been found in the build log!"
-    exit -1
-elif grep -q -R "NOTE" "$LOG_FILE_NAME"; then
-    echo "NOTES have been found in the build log!"
-    exit -1
-fi
+#R CMD check "${PKG_FILE_NAME}" --as-cran || exit -1
+#if grep -q -R "WARNING" "$LOG_FILE_NAME"; then
+#    echo "WARNINGS have been found in the build log!"
+#    exit -1
+#elif grep -q -R "NOTE" "$LOG_FILE_NAME"; then
+#    echo "NOTES have been found in the build log!"
+#    exit -1
+#fi
 
+Rscript -e 'reticulate::py_discover_config(required_module = "rgf")'
+Rscript -e 'reticulate::import("rgf")'
+Rscript -e 'testthat::test_dir("./tests")'
 Rscript -e 'covr::codecov(quiet = FALSE)'
